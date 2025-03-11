@@ -179,7 +179,7 @@ private extension CollapsingTextView
         }
         catch
         {
-            print("[ALTLog] Failed to update CollapsingTextView line spacing:", error)
+            print("[ALTLog] 无法更新 CollapsingTextView 行距：", error)
         }
     }
 }
