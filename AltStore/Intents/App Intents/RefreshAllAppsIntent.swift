@@ -52,19 +52,19 @@ extension RefreshAllAppsIntent
 @available(iOS 17.0, *)
 struct RefreshAllAppsIntent: AppIntent, CustomIntentMigratedAppIntent, PredictableIntent, ProgressReportingIntent, ForegroundContinuableIntent
 {
-    static let intentClassName = "RefreshAllIntent"
+    static let intentClassName = "重新刷新所有内容"
     
-    static var title: LocalizedStringResource = "Refresh All Apps"
-    static var description = IntentDescription("Refreshes your sideloaded apps to prevent them from expiring.")
+    static var title: LocalizedStringResource = "刷新所有应用程序"
+    static var description = IntentDescription("刷新侧面加载的应用程序以防止其过期。")
     
     static var parameterSummary: some ParameterSummary {
-        Summary("Refresh All Apps")
+        Summary("刷新所有应用程序")
     }
     
     static var predictionConfiguration: some IntentPredictionConfiguration {
         IntentPrediction {
             DisplayRepresentation(
-                title: "Refresh All Apps",
+                title: "刷新所有应用程序",
                 subtitle: ""
             )
         }
@@ -124,7 +124,7 @@ struct RefreshAllAppsIntent: AppIntent, CustomIntentMigratedAppIntent, Predictab
                 }
             }
             
-            return .result(dialog: "All apps have been refreshed.")
+            return .result(dialog: "所有应用程序都已刷新。")
         }
         catch
         {
