@@ -20,9 +20,9 @@ enum DeveloperDiskErrorCode: Int, ALTErrorEnum
     var errorFailureReason: String {
         switch self
         {
-        case .unknownDownloadURL: return NSLocalizedString("The URL to download the Developer disk image could not be determined.", comment: "")
-        case .unsupportedOperatingSystem: return NSLocalizedString("The device's operating system does not support installing Developer disk images.", comment: "")
-        case .downloadedDiskNotFound: return NSLocalizedString("DeveloperDiskImage.dmg and its signature could not be found in the downloaded archive.", comment: "")
+        case .unknownDownloadURL: return NSLocalizedString("无法确定下载开发人员磁盘映像的 URL。", comment: "")
+        case .unsupportedOperatingSystem: return NSLocalizedString("该设备的操作系统不支持安装开发人员磁盘映像。", comment: "")
+        case .downloadedDiskNotFound: return NSLocalizedString("在下载的档案中找不到 DeveloperDiskImage.dmg 及其签名。", comment: "")
         }
     }
 }
