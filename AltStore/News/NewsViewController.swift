@@ -38,7 +38,7 @@ private class AppBannerFooterView: UICollectionReusableView
     }
     
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("初始化(coder:) 尚未实现")
     }
 }
 
@@ -111,7 +111,7 @@ class NewsViewController: UICollectionViewController, PeekPopPreviewing
         
         self.retryButton = UIButton(type: .system)
         self.retryButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
-        self.retryButton.setTitle(NSLocalizedString("Try Again", comment: ""), for: .normal)
+        self.retryButton.setTitle(NSLocalizedString("重试", comment: ""), for: .normal)
         self.retryButton.addTarget(self, action: #selector(NewsViewController.updateSources), for: .primaryActionTriggered)
         self.placeholderView.stackView.addArrangedSubview(self.retryButton)
         
@@ -261,7 +261,7 @@ private extension NewsViewController
             self.placeholderView.textLabel.isHidden = true
             self.placeholderView.detailTextLabel.isHidden = false
             
-            self.placeholderView.detailTextLabel.text = NSLocalizedString("Loading...", comment: "")
+            self.placeholderView.detailTextLabel.text = NSLocalizedString("加载中...", comment: "")
             
             self.retryButton.isHidden = true
             self.placeholderView.activityIndicatorView.startAnimating()
@@ -270,7 +270,7 @@ private extension NewsViewController
             self.placeholderView.textLabel.isHidden = false
             self.placeholderView.detailTextLabel.isHidden = false
             
-            self.placeholderView.textLabel.text = NSLocalizedString("Unable to Fetch News", comment: "")
+            self.placeholderView.textLabel.text = NSLocalizedString("无法获取新闻", comment: "")
             self.placeholderView.detailTextLabel.text = error.localizedDescription
             
             self.retryButton.isHidden = false
@@ -364,7 +364,7 @@ private extension NewsViewController
                     toastView.opensErrorLog = true
                     toastView.show(in: self)
                     
-                case .success: print("Installed app:", storeApp.bundleIdentifier)
+                case .success: print("已安装的应用程序：", storeApp.bundleIdentifier)
                 }
                 
                 UIView.performWithoutAnimation {
