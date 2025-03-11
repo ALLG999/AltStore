@@ -608,7 +608,7 @@ extension AppViewController
             DispatchQueue.main.async {
                 switch result
                 {
-                case .success: print("Updated app from AppViewController:", installedApp.bundleIdentifier)
+                case .success: print("从 AppViewController 更新应用程序：", installedApp.bundleIdentifier)
                 case .failure(OperationError.cancelled): break
                 case .failure(let error):
                     let toastView = ToastView(error: error)
