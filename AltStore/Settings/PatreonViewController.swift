@@ -112,31 +112,31 @@ private extension PatreonViewController
         headerView.supportButton.addTarget(self, action: #selector(PatreonViewController.openPatreonURL(_:)), for: .primaryActionTriggered)
         headerView.accountButton.removeTarget(self, action: nil, for: .primaryActionTriggered)
         
-        let defaultSupportButtonTitle = NSLocalizedString("Become a patron", comment: "")
-        let isPatronSupportButtonTitle = NSLocalizedString("View Patreon", comment: "")
+        let defaultSupportButtonTitle = NSLocalizedString("成为赞助人", comment: "")
+        let isPatronSupportButtonTitle = NSLocalizedString("查看Patreon", comment: "")
         
         let defaultText = NSLocalizedString("""
-        Hey y'all,
+        嘿，你们，
         
-        You can support future development of our apps by donating to us on Patreon. In return, you'll receive access to the beta versions of our apps and be among the first to try the latest features.
+您可以通过在Patreon上向我们捐款来支持我们应用程序的未来发展。作为回报，您将可以访问我们应用程序的测试版，并率先尝试最新功能。
         
-        Thanks for all your support 💜
-        Riley & Shane
+感谢您一直以来的支持💜
+莱利和肖恩
         """, comment: "")
         
         let isPatronText = NSLocalizedString("""
-        Hey ,
+       嘿，
         
-        You’re the best. Your account was linked successfully, so you now have access to the beta versions of all of our apps. You can find them all in the Browse tab.
+你是最棒的。您的帐户已成功链接，因此您现在可以访问我们所有应用程序的测试版。您可以在“浏览”选项卡中找到它们。
         
-        Thanks for all of your support. Enjoy!
-        Riley & Shane
+感谢您一直以来的支持。享受！
+莱利和肖恩
         """, comment: "")
         
         if let account = DatabaseManager.shared.patreonAccount(), PatreonAPI.shared.isAuthenticated
         {
             headerView.accountButton.addTarget(self, action: #selector(PatreonViewController.signOut(_:)), for: .primaryActionTriggered)
-            headerView.accountButton.setTitle(String(format: NSLocalizedString("Unlink %@", comment: ""), account.name), for: .normal)
+            headerView.accountButton.setTitle(String(format: NSLocalizedString("取消链接 %@", comment: ""), account.name), for: .normal)
             
             if account.isAltStorePatron
             {
@@ -206,7 +206,7 @@ private extension PatreonViewController
                     }
                     catch
                     {
-                        Logger.main.error("Failed to update sources after authenticating Patreon account. \(error.localizedDescription, privacy: .public)")
+                        Logger.main.error("验证Patreon帐户后更新源失败。 \(error.localizedDescription, privacy: .public)")
                     }
                     
                     DispatchQueue.main.async {
@@ -256,13 +256,13 @@ private extension PatreonViewController
         
         
         #if MARKETPLACE
-        let message = NSLocalizedString("You will no longer be able to install or update any apps that require pledges.", comment: "")
+        let message = NSLocalizedString("您将无法再安装或更新任何需要承诺的应用程序。", comment: "")
         #else
-        let message = NSLocalizedString("You will no longer be able to install or refresh any apps that require pledges.", comment: "")
+        let message = NSLocalizedString("您将无法再安装或刷新任何需要承诺的应用程序。", comment: "")
         #endif
         
-        let alertController = UIAlertController(title: NSLocalizedString("Are you sure you want to unlink your Patreon account?", comment: ""), message: message, preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Unlink Patreon Account", comment: ""), style: .destructive) { _ in signOut() })
+        let alertController = UIAlertController(title: NSLocalizedString("您确定要取消Patreon帐户的链接吗？", comment: ""), message: message, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("取消链接Patreon帐户", comment: ""), style: .destructive) { _ in signOut() })
         alertController.addAction(.cancel)
         self.present(alertController, animated: true, completion: nil)
     }
@@ -292,7 +292,7 @@ extension PatreonViewController
             if kind == UICollectionView.elementKindSectionHeader
             {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "PatronsHeader", for: indexPath) as! PatronsHeaderView
-                headerView.textLabel.text = NSLocalizedString("Special thanks to...", comment: "")
+                headerView.textLabel.text = NSLocalizedString("特别感谢。。。", comment: "")
                 return headerView
             }
             else
@@ -318,7 +318,7 @@ extension PatreonViewController
                         // Only show error message if there aren't any cached Patrons (or if this is a debug build).
                         
                         footerView.button.isHidden = false
-                        footerView.button.setTitle(NSLocalizedString("Error Loading Patrons", comment: ""), for: .normal)
+                        footerView.button.setTitle(NSLocalizedString("加载用户时出错", comment: ""), for: .normal)
                     }
                     else
                     {
