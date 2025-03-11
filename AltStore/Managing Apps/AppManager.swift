@@ -152,7 +152,7 @@ extension AppManager
             }
             catch
             {
-                print("Error while fetching installed apps.", error)
+                print("获取已安装的应用程序时出错。", error)
             }
             #endif
             
@@ -172,19 +172,19 @@ extension AppManager
                         
                         if isDirectory && !installedAppBundleIDs.contains(bundleID) && !self.isActivelyManagingApp(withBundleID: bundleID)
                         {
-                            print("DELETING CACHED APP:", bundleID)
+                            print("删除缓存的应用程序：", bundleID)
                             try FileManager.default.removeItem(at: appDirectory)
                         }
                     }
                     catch
                     {
-                        print("Failed to remove cached app directory.", error)
+                        print("删除缓存的应用目录失败。", error)
                     }
                 }
             }
             catch
             {
-                print("Failed to remove cached apps.", error)
+                print("无法删除缓存的应用程序。", error)
             }
         }
     }
@@ -242,26 +242,26 @@ extension AppManager
                 .filter { $0.bundleIdentifier != app.bundleIdentifier } // Don't count app towards total if it matches activating app
                 .sorted { ($0.name, $0.refreshedDate) < ($1.name, $1.refreshedDate) }
             
-            var title: String = NSLocalizedString("Cannot Activate More than 3 Apps", comment: "")
+            var title: String = NSLocalizedString("无法激活超过 3 个应用程序", comment: "")
             let message: String
             
             if UserDefaults.standard.activeAppLimitIncludesExtensions
             {
                 if app.appExtensions.isEmpty
                 {
-                    message = NSLocalizedString("Non-developer Apple IDs are limited to 3 active apps and app extensions. Please choose an app to deactivate.", comment: "")
+                    message = NSLocalizedString("非开发者 Apple ID 最多只能启用 3 个应用和应用扩展。请选择要停用的应用。", comment: "")
                 }
                 else
                 {
-                    title = NSLocalizedString("Cannot Activate More than 3 Apps and App Extensions", comment: "")
+                    title = NSLocalizedString("无法激活 3 个以上的应用程序和应用程序扩展", comment: "")
                     
-                    let appExtensionText = app.appExtensions.count == 1 ? NSLocalizedString("app extension", comment: "") : NSLocalizedString("app extensions", comment: "")
-                    message = String(format: NSLocalizedString("Non-developer Apple IDs are limited to 3 active apps and app extensions, and “%@” contains %@ %@. Please choose an app to deactivate.", comment: ""), app.name, NSNumber(value: app.appExtensions.count), appExtensionText)
+                    let appExtensionText = app.appExtensions.count == 1 ? NSLocalizedString("应用扩展", comment: "") : NSLocalizedString("应用扩展", comment: "")
+                    message = String(format: NSLocalizedString("非开发者 Apple ID 最多只能拥有 3 个活跃应用和应用扩展，并且 “%@” 包含 %@ %@。 请选择要停用的应用程序。", comment: ""), app.name, NSNumber(value: app.appExtensions.count), appExtensionText)
                 }
             }
             else
             {
-                message = NSLocalizedString("Non-developer Apple IDs are limited to 3 active apps. Please choose an app to deactivate.", comment: "")
+                message = NSLocalizedString("非开发者 Apple ID 最多只能激活 3 个应用。请选择要停用的应用。", comment: "")
             }
             
             let activeAppsCount = activeApps.map { $0.requiredActiveSlots }.reduce(0, +)
@@ -331,15 +331,15 @@ extension AppManager
         }
     }
     
-    func add(@AsyncManaged _ source: Source, message: String? = NSLocalizedString("Make sure to only add sources that you trust.", comment: ""), presentingViewController: UIViewController) async throws
+    func add(@AsyncManaged _ source: Source, message: String? = NSLocalizedString("确保仅添加您信任的来源。", comment: ""), presentingViewController: UIViewController) async throws
     {
         let (sourceName, sourceURL) = await $source.perform { ($0.name, $0.sourceURL) }
         
         let context = DatabaseManager.shared.persistentContainer.newBackgroundContext()
         async let fetchedSource = try await self.fetchSource(sourceURL: sourceURL, managedObjectContext: context) // Fetch source async while showing alert.
 
-        let title = String(format: NSLocalizedString("Would you like to add the source “%@”?", comment: ""), sourceName)
-        let action = await UIAlertAction(title: NSLocalizedString("Add Source", comment: ""), style: .default)
+        let title = String(format: NSLocalizedString("您想添加来源吗 “%@”?", comment: ""), sourceName)
+        let action = await UIAlertAction(title: NSLocalizedString("添加源", comment: ""), style: .default)
         try await presentingViewController.presentConfirmationAlert(title: title, message: message ?? "", primaryAction: action)
 
         // Wait for fetch to finish before saving context to make
@@ -363,9 +363,9 @@ extension AppManager
             throw OperationError.forbidden(failureReason: NSLocalizedString("The default AltStore source cannot be removed.", comment: ""))
         }
         
-        let title = String(format: NSLocalizedString("Are you sure you want to remove the source “%@”?", comment: ""), sourceName)
-        let message = NSLocalizedString("Any apps you've installed from this source will remain, but they'll no longer receive any app updates.", comment: "")
-        let action = await UIAlertAction(title: NSLocalizedString("Remove Source", comment: ""), style: .destructive)
+        let title = String(format: NSLocalizedString("您确定要删除源吗 “%@”?", comment: ""), sourceName)
+        let message = NSLocalizedString("您从该来源安装的任何应用程序都将保留，但它们将不再接收任何应用程序更新。", comment: "")
+        let action = await UIAlertAction(title: NSLocalizedString("移除来源", comment: ""), style: .destructive)
         try await presentingViewController.presentConfirmationAlert(title: title, message: message, primaryAction: action)
         
         let context = DatabaseManager.shared.persistentContainer.newBackgroundContext()
@@ -399,7 +399,7 @@ extension AppManager
                 
                 do
                 {
-                    let message = String(format: NSLocalizedString("You must add this source before installing apps from it.\n\n“%@” will begin downloading once it has been added.", comment: ""), appName)
+                    let message = String(format: NSLocalizedString("您必须先添加此源，然后才能从中安装应用程序。\n\n“%@”将在添加后开始下载。", comment: ""), appName)
                     try await AppManager.shared.add(source, message: message, presentingViewController: presentingViewController)
                 }
                 catch let error as CancellationError 
@@ -409,7 +409,7 @@ extension AppManager
                 catch
                 {
                     // This should be an alert, so show directly rather than re-throwing error.
-                    await presentingViewController.presentAlert(title: NSLocalizedString("Unable to Add Source", comment: ""), message: error.localizedDescription)
+                    await presentingViewController.presentAlert(title: NSLocalizedString("无法添加源", comment: ""), message: error.localizedDescription)
                     
                     // Don't rethrow error
                     // throw error
@@ -509,7 +509,7 @@ extension AppManager
                     case .success(let source): fetchedSources.insert(source)
                     case .failure(let nsError as NSError):
                         let source = managedObjectContext.object(with: source.objectID) as! Source
-                        let title = String(format: NSLocalizedString("Unable to Refresh “%@” Source", comment: ""), source.name)
+                        let title = String(format: NSLocalizedString("无法刷新 “%@” 源", comment: ""), source.name)
                         
                         let error = nsError.withLocalizedTitle(title)
                         errors[source] = error
@@ -545,7 +545,7 @@ extension AppManager
     func fetchAppIDs(completionHandler: @escaping (Result<([AppID], NSManagedObjectContext), Error>) -> Void)
     {
         let authenticationOperation = self.authenticate(presentingViewController: nil) { (result) in
-            print("Authenticated for fetching App IDs with result:", result)
+            print("已通过身份验证，可获取应用程序 ID，结果如下：", result)
         }
         
         let fetchAppIDsOperation = FetchAppIDsOperation(context: authenticationOperation.context)
@@ -582,7 +582,7 @@ extension AppManager
             }
             catch
             {
-                print("Error updating Friend Zone Patrons:", error)
+                print("更新友情区赞助人时出错：", error)
                 self.updatePatronsResult = .failure(error)
             }
             
@@ -629,7 +629,7 @@ extension AppManager
                         }
                         catch
                         {
-                            Logger.main.error("Failed to assign error \(sanitizedError.localizedErrorCode) to source \(sourceID, privacy: .public). \(error.localizedDescription, privacy: .public)")
+                            Logger.main.error("分配错误失败 \(sanitizedError.localizedErrorCode) to source \(sourceID, privacy: .public). \(error.localizedDescription, privacy: .public)")
                         }
                     }
                     
@@ -640,7 +640,7 @@ extension AppManager
             {
                 if error.localizedTitle == nil
                 {
-                    error = error.withLocalizedTitle(NSLocalizedString("Unable to Refresh Store", comment: ""))
+                    error = error.withLocalizedTitle(NSLocalizedString("无法刷新商店", comment: ""))
                 }
                 
                 DispatchQueue.main.async {
@@ -860,7 +860,7 @@ extension AppManager
             switch result
             {
             case .success: break
-            case .failure(let error): print("Failed to remove app backup.", error)
+            case .failure(let error): print("无法删除应用程序备份。", error)
             }
             
             // Throw the error from removeAppOperation,
@@ -899,7 +899,7 @@ extension AppManager
             {
             case .success: completionHandler(.success(()))
             case .failure(let nsError as NSError):
-                let localizedTitle = String(format: NSLocalizedString("Failed to Enable JIT for %@", comment: ""), appName)
+                let localizedTitle = String(format: NSLocalizedString("无法启用 JIT %@", comment: ""), appName)
                 let error = nsError.withLocalizedTitle(localizedTitle)
                 
                 self.log(error, operation: .enableJIT, app: installedApp)
@@ -1648,7 +1648,7 @@ private extension AppManager
                         {
                         case .failure(let error):
                             // Don't report error, since it doesn't really matter.
-                            print("Failed to delete app backup.", error)
+                            print("无法删除应用程序备份。", error)
                             
                         case .success: break
                         }
@@ -2005,7 +2005,7 @@ private extension AppManager
                 }
                 else
                 {
-                    appName = NSLocalizedString("App", comment: "")
+                    appName = NSLocalizedString("应用", comment: "")
                 }
             }
             else
@@ -2016,13 +2016,13 @@ private extension AppManager
             let localizedTitle: String
             switch operation
             {
-            case .install: localizedTitle = String(format: NSLocalizedString("Failed to Install %@", comment: ""), appName)
-            case .refresh: localizedTitle = String(format: NSLocalizedString("Failed to Refresh %@", comment: ""), appName)
-            case .update: localizedTitle = String(format: NSLocalizedString("Failed to Update %@", comment: ""), appName)
-            case .activate: localizedTitle = String(format: NSLocalizedString("Failed to Activate %@", comment: ""), appName)
-            case .deactivate: localizedTitle = String(format: NSLocalizedString("Failed to Deactivate %@", comment: ""), appName)
-            case .backup: localizedTitle = String(format: NSLocalizedString("Failed to Back Up %@", comment: ""), appName)
-            case .restore: localizedTitle = String(format: NSLocalizedString("Failed to Restore %@ Backup", comment: ""), appName)
+            case .install: localizedTitle = String(format: NSLocalizedString("安装失败 %@", comment: ""), appName)
+            case .refresh: localizedTitle = String(format: NSLocalizedString("刷新失败 %@", comment: ""), appName)
+            case .update: localizedTitle = String(format: NSLocalizedString("更新失败 %@", comment: ""), appName)
+            case .activate: localizedTitle = String(format: NSLocalizedString("激活失败 %@", comment: ""), appName)
+            case .deactivate: localizedTitle = String(format: NSLocalizedString("停用失败 %@", comment: ""), appName)
+            case .backup: localizedTitle = String(format: NSLocalizedString("备份失败 %@", comment: ""), appName)
+            case .restore: localizedTitle = String(format: NSLocalizedString("无法恢复 %@ 备份", comment: ""), appName)
             }
             
             let error = nsError.withLocalizedTitle(localizedTitle)
@@ -2045,8 +2045,8 @@ private extension AppManager
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeIntervalUntilNotification, repeats: false)
         
         let content = UNMutableNotificationContent()
-        content.title = NSLocalizedString("AltStore Expiring Soon", comment: "")
-        content.body = NSLocalizedString("AltStore will expire in 24 hours. Open the app and refresh it to prevent it from expiring.", comment: "")
+        content.title = NSLocalizedString("AltStore 即将到期", comment: "")
+        content.body = NSLocalizedString("AltStore 将在 24 小时后过期。请打开应用程序并刷新以防止其过期。", comment: "")
         content.sound = .default
         
         let request = UNNotificationRequest(identifier: AppManager.expirationWarningNotificationID, content: content, trigger: trigger)
@@ -2079,7 +2079,7 @@ private extension AppManager
             }
             catch let saveError
             {
-                print("[ALTLog] Failed to log error \(sanitizedError.domain) code \(sanitizedError.code) for \(app.bundleIdentifier):", saveError)
+                print("[ALTLog] 无法记录错误 \(sanitizedError.domain) code \(sanitizedError.code) for \(app.bundleIdentifier):", saveError)
             }
         }
     }
