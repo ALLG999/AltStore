@@ -286,7 +286,7 @@ private extension BrowseViewController
             if let error = error, let dataSource
             {
                 let app = dataSource.item(at: indexPath)
-                Logger.main.debug("Failed to load app icon from \(app.iconURL, privacy: .public). \(error.localizedDescription, privacy: .public)")
+                Logger.main.debug("无法从以下位置加载应用程序图标 \(app.iconURL, privacy: .public). \(error.localizedDescription, privacy: .public)")
             }
         }
         
@@ -324,10 +324,10 @@ private extension BrowseViewController
     {
         if self.searchPredicate != nil
         {
-            self.placeholderView.textLabel.text = NSLocalizedString("No Apps", comment: "")
+            self.placeholderView.textLabel.text = NSLocalizedString("没有应用程序", comment: "")
             self.placeholderView.textLabel.isHidden = false
             
-            self.placeholderView.detailTextLabel.text = NSLocalizedString("Please make sure your spelling is correct, or try searching for another app.", comment: "")
+            self.placeholderView.detailTextLabel.text = NSLocalizedString("请确保您的拼写正确，或尝试搜索其他应用程序。", comment: "")
             self.placeholderView.detailTextLabel.isHidden = false
             
             self.placeholderView.activityIndicatorView.stopAnimating()
@@ -340,7 +340,7 @@ private extension BrowseViewController
                 self.placeholderView.textLabel.isHidden = true
                 self.placeholderView.detailTextLabel.isHidden = false
                 
-                self.placeholderView.detailTextLabel.text = NSLocalizedString("Loading...", comment: "")
+                self.placeholderView.detailTextLabel.text = NSLocalizedString("加载中...", comment: "")
                 
                 self.placeholderView.activityIndicatorView.startAnimating()
                 
@@ -348,13 +348,13 @@ private extension BrowseViewController
                 self.placeholderView.textLabel.isHidden = false
                 self.placeholderView.detailTextLabel.isHidden = false
                 
-                self.placeholderView.textLabel.text = NSLocalizedString("Unable to Fetch Apps", comment: "")
+                self.placeholderView.textLabel.text = NSLocalizedString("无法获取应用程序", comment: "")
                 self.placeholderView.detailTextLabel.text = error.localizedDescription
                 
                 self.placeholderView.activityIndicatorView.stopAnimating()
                 
             case .success:
-                self.placeholderView.textLabel.text = NSLocalizedString("No Apps", comment: "")
+                self.placeholderView.textLabel.text = NSLocalizedString("没有应用程序", comment: "")
                 self.placeholderView.textLabel.isHidden = false
                 self.placeholderView.detailTextLabel.isHidden = true
                 
@@ -474,7 +474,7 @@ private extension BrowseViewController
         }
         catch
         {
-            Logger.main.error("Failed to fetch categories. \(error.localizedDescription, privacy: .public)")
+            Logger.main.error("无法获取类别。 \(error.localizedDescription, privacy: .public)")
             
             return []
         }
@@ -518,10 +518,10 @@ private extension BrowseViewController
             completion(actions)
         }
         
-        let sortMenu = UIMenu(title: NSLocalizedString("Sort by…", comment: ""), options: [.singleSelection], children: [children])
+        let sortMenu = UIMenu(title: NSLocalizedString("排序方式…", comment: ""), options: [.singleSelection], children: [children])
         let sortIcon = UIImage(systemName: "arrow.up.arrow.down")
         
-        let sortButton = UIBarButtonItem(title: NSLocalizedString("Sort by…", comment: ""), image: sortIcon, primaryAction: nil, menu: sortMenu)
+        let sortButton = UIBarButtonItem(title: NSLocalizedString("排序方式…", comment: ""), image: sortIcon, primaryAction: nil, menu: sortMenu)
         self.sortButton = sortButton
         
         self.navigationItem.rightBarButtonItems = [sortButton]
