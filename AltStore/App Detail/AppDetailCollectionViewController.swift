@@ -90,7 +90,7 @@ class AppDetailCollectionViewController: UICollectionViewController
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("初始化(coder:)尚未实施")
     }
     
     override func viewDidLoad()
@@ -125,7 +125,7 @@ class AppDetailCollectionViewController: UICollectionViewController
                 
                 configuration.secondaryTextProperties.font = UIFont.preferredFont(forTextStyle: .callout)
                 configuration.textToSecondaryTextVerticalPadding = 8
-                configuration.secondaryText = NSLocalizedString("Entitlements are additional permissions that grant access to certain system services, including potentially sensitive information.", comment: "")
+                configuration.secondaryText = NSLocalizedString("权利是授予访问某些系统服务（包括潜在敏感信息）的附加权限。", comment: "")
                 
             case .unknownEntitlements:
                 configuration.text = NSLocalizedString("Other Entitlements", comment: "")
@@ -206,8 +206,8 @@ private extension AppDetailCollectionViewController
             guard let self, #available(iOS 16, *) else { return }
             
             cell.contentConfiguration = UIHostingConfiguration {
-                AppPermissionsCard(title: "Privacy",
-                                   description: "\(self.app.name) may request access to the following:",
+                AppPermissionsCard(title: "隐私",
+                                   description: "\(self.app.name) 可以请求访问以下内容：",
                                    tintColor: Color(uiColor: self.app.tintColor ?? .altPrimary),
                                    permissions: self.privacyPermissions)
             }
@@ -274,7 +274,7 @@ private extension AppDetailCollectionViewController
     
     func showUnknownEntitlementsAlert()
     {
-        let alertController = UIAlertController(title: NSLocalizedString("Other Entitlements", comment: ""), message: NSLocalizedString("AltStore does not have detailed information for these entitlements.", comment: ""), preferredStyle: .alert)
+        let alertController = UIAlertController(title: NSLocalizedString("其他权利", comment: ""), message: NSLocalizedString("AltStore 没有这些权利的详细信息。", comment: ""), preferredStyle: .alert)
         alertController.addAction(.ok)
         self.present(alertController, animated: true)
     }
