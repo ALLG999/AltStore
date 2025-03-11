@@ -203,7 +203,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         }
         else if ([fileURL.pathExtension.lowercaseString isEqualToString:@"ipa"])
         {
-            NSLog(@"Unzipping .ipa...");
+            NSLog(@"解压 .ipa...");
             
             temporaryDirectoryURL = [NSFileManager.defaultManager.temporaryDirectory URLByAppendingPathComponent:[[NSUUID UUID] UUIDString] isDirectory:YES];
             
@@ -317,7 +317,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
             free(files);
         }
         
-        NSLog(@"Writing to device...");
+        NSLog(@"写入设备...");
         
         plist_t options = instproxy_client_options_new();
         instproxy_client_options_add(options, "PackageType", "Developer", NULL);
@@ -331,12 +331,12 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         if (![self writeDirectory:appBundleURL toDestinationURL:destinationURL client:afc progress:nil error:&writeError])
         {
             int removeResult = afc_remove_path_and_contents(afc, stagingURL.relativePath.fileSystemRepresentation);
-            NSLog(@"Remove staging app result: %@", @(removeResult));
+            NSLog(@"删除暂存应用程序结果： %@", @(removeResult));
             
             return finish(writeError);
         }
         
-        NSLog(@"Finished writing to device.");
+        NSLog(@"已完成写入设备。");
         
         if (service)
         {
@@ -390,14 +390,14 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
                 NSError *error = nil;
                 if (![[NSFileManager defaultManager] removeItemAtURL:temporaryDirectoryURL error:&error])
                 {
-                    NSLog(@"Error removing temporary directory. %@", error);
+                    NSLog(@"删除临时目录时出错。 %@", error);
                 }
             }
             
             dispatch_semaphore_signal(semaphore);
         };
         
-        NSLog(@"Installing to device %@...", udid);
+        NSLog(@"安装至设备 %@...", udid);
         
         instproxy_install(ipc, destinationURL.relativePath.fileSystemRepresentation, options, ALTDeviceManagerUpdateStatus, uuidString);
         instproxy_client_options_free(options);
@@ -500,7 +500,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
     {
         if (openResult == AFC_E_OBJECT_IS_DIR)
         {
-            NSLog(@"Treating file as directory: %@ %@", fileURL, destinationURL);
+            NSLog(@"将文件视为目录： %@ %@", fileURL, destinationURL);
             return [self writeDirectory:fileURL toDestinationURL:destinationURL client:afc progress:progress error:error];
         }
         
@@ -524,7 +524,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         {
             if (error)
             {
-                NSLog(@"Failed writing file with error: %@ (%@ %@)", @(writeResult), fileURL, destinationURL);
+                NSLog(@"写入文件失败，错误如下： %@ (%@ %@)", @(writeResult), fileURL, destinationURL);
                 *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteUnknownError userInfo:@{NSURLErrorKey: destinationURL}];
             }
             
@@ -539,7 +539,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
     {
         if (error)
         {
-            NSLog(@"Failed writing file due to mismatched sizes: %@ vs %@ (%@ %@)", @(bytesWritten), @(data.length), fileURL, destinationURL);
+            NSLog(@"由于大小不匹配导致写入文件失败： %@ vs %@ (%@ %@)", @(bytesWritten), @(data.length), fileURL, destinationURL);
             *error = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFileWriteUnknownError userInfo:@{NSURLErrorKey: destinationURL}];
         }
         
@@ -873,13 +873,13 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
     
     if (result == MISAGENT_E_SUCCESS)
     {
-        NSLog(@"Installed profile: %@ (%@)", provisioningProfile.bundleIdentifier, provisioningProfile.UUID);
+        NSLog(@"已安装配置文件： %@ (%@)", provisioningProfile.bundleIdentifier, provisioningProfile.UUID);
         return YES;
     }
     else
     {
         int statusCode = misagent_get_status_code(mis);
-        NSLog(@"Failed to install provisioning profile %@ (%@). Error Code: %@", provisioningProfile.bundleIdentifier, provisioningProfile.UUID, @(statusCode));
+        NSLog(@"无法安装配置文件 %@ (%@). 错误代码: %@", provisioningProfile.bundleIdentifier, provisioningProfile.UUID, @(statusCode));
         
         if (error)
         {
@@ -909,13 +909,13 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
     misagent_error_t result = misagent_remove(mis, provisioningProfile.UUID.UUIDString.lowercaseString.UTF8String);
     if (result == MISAGENT_E_SUCCESS)
     {
-        NSLog(@"Removed provisioning profile: %@ (%@)", provisioningProfile.bundleIdentifier, provisioningProfile.UUID);
+        NSLog(@"删除了配置文件： %@ (%@)", provisioningProfile.bundleIdentifier, provisioningProfile.UUID);
         return YES;
     }
     else
     {
         int statusCode = misagent_get_status_code(mis);
-        NSLog(@"Failed to remove provisioning profile %@ (%@). Error Code: %@", provisioningProfile.bundleIdentifier, provisioningProfile.UUID, @(statusCode));
+        NSLog(@"无法删除配置文件e %@ (%@). 错误代码: %@", provisioningProfile.bundleIdentifier, provisioningProfile.UUID, @(statusCode));
         
         if (error)
         {
@@ -1432,7 +1432,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
     void (^finish)(ALTNotificationConnection *, NSError *) = ^(ALTNotificationConnection *connection, NSError *error) {
         if (error != nil)
         {
-            NSLog(@"Notification Connection Error: %@", error);
+            NSLog(@"通知连接错误： %@", error);
         }
         
         completionHandler(connection, error);
@@ -1511,7 +1511,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
     
     if (idevice_get_device_list_extended(&devices, &count) < 0)
     {
-        fprintf(stderr, "ERROR: Unable to retrieve device list!\n");
+        fprintf(stderr, "错误：无法检索设备列表！\n");
         return @[];
     }
     
@@ -1577,7 +1577,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         int result = lockdownd_client_new(device, &client, "altserver");
         if (result != LOCKDOWN_E_SUCCESS)
         {
-            fprintf(stderr, "ERROR: Connecting to device %s failed! (%d)\n", udid, result);
+            fprintf(stderr, "错误：连接设备 %s 失败 (%d)\n", udid, result);
             
             cleanUp();
             continue;
@@ -1585,7 +1585,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         
         if (lockdownd_get_device_name(client, &device_name) != LOCKDOWN_E_SUCCESS || device_name == NULL)
         {
-            fprintf(stderr, "ERROR: Could not get device name!\n");
+            fprintf(stderr, "错误：无法获取设备名称！\n");
             
             cleanUp();
             continue;
@@ -1593,7 +1593,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         
         if (lockdownd_get_value(client, NULL, "ProductType", &device_type_plist) != LOCKDOWN_E_SUCCESS)
         {
-            fprintf(stderr, "ERROR: Could not get device type for %s!\n", device_name);
+            fprintf(stderr, "错误：无法获取设备类型 %s!\n", device_name);
             
             cleanUp();
             continue;
@@ -1616,7 +1616,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         }
         else
         {
-            fprintf(stderr, "ERROR: Unknown device type %s for %s!\n", device_type_string, device_name);
+            fprintf(stderr, "错误：未知的设备类型 %s for %s!\n", device_type_string, device_name);
             
             cleanUp();
             continue;
@@ -1624,7 +1624,7 @@ NSNotificationName const ALTDeviceManagerDeviceDidDisconnectNotification = @"ALT
         
         if (lockdownd_get_value(client, NULL, "ProductVersion", &device_version_plist) != LOCKDOWN_E_SUCCESS)
         {
-            fprintf(stderr, "ERROR: Could not get device type for %s!\n", device_name);
+            fprintf(stderr, "错误：无法获取设备类型 %s!\n", device_name);
             
             cleanUp();
             continue;
@@ -1679,7 +1679,7 @@ void ALTDeviceManagerUpdateStatus(plist_t command, plist_t status, void *uuid)
             
             if (code != 0 || name != NULL)
             {
-                NSLog(@"Error installing app. %@ (%@). %@", @(code), @(name ?: ""), localizedDescription);
+                NSLog(@"安装应用程序时出错。 %@ (%@). %@", @(code), @(name ?: ""), localizedDescription);
                 
                 NSError *error = nil;
                 
@@ -1707,7 +1707,7 @@ void ALTDeviceManagerUpdateStatus(plist_t command, plist_t status, void *uuid)
             }
             else
             {
-                NSLog(@"Finished installing app!");
+                NSLog(@"应用程序安装完成！!");
                 completionHandler(nil);
             }
             
@@ -1719,7 +1719,7 @@ void ALTDeviceManagerUpdateStatus(plist_t command, plist_t status, void *uuid)
     {
         progress.completedUnitCount = percent;
         
-        NSLog(@"Installation Progress: %@", @(percent));
+        NSLog(@"安装进度： %@", @(percent));
     }
 }
 
@@ -1742,7 +1742,7 @@ void ALTDeviceManagerUpdateAppDeletionStatus(plist_t command, plist_t status, vo
         {
             if (code != 0 || errorName != NULL)
             {
-                NSLog(@"Error removing app. %@ (%@). %@", @(code), @(errorName ?: ""), @(errorDescription ?: ""));
+                NSLog(@"删除应用程序时出错。 %@ (%@). %@", @(code), @(errorName ?: ""), @(errorDescription ?: ""));
                 
                 NSError *underlyingError = [NSError errorWithDomain:AltServerInstallationErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey: @(errorDescription ?: "")}];
                 NSError *error = [NSError errorWithDomain:AltServerErrorDomain code:ALTServerErrorAppDeletionFailed userInfo:@{NSUnderlyingErrorKey: underlyingError}];
@@ -1751,7 +1751,7 @@ void ALTDeviceManagerUpdateAppDeletionStatus(plist_t command, plist_t status, vo
             }
             else
             {
-                NSLog(@"Finished removing app!");
+                NSLog(@"应用程序删除完成！");
                 completionHandler(nil);
             }
             
