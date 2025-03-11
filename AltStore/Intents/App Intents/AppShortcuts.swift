@@ -14,12 +14,12 @@ public struct ShortcutsProvider: AppShortcutsProvider
     public static var appShortcuts: [AppShortcut] {
         AppShortcut(intent: RefreshAllAppsIntent(), 
                     phrases: [
-                        "Refresh \(.applicationName)",
-                        "Refresh \(.applicationName) apps",
-                        "Refresh my \(.applicationName) apps",
-                        "Refresh apps with \(.applicationName)",
+                        "刷新 \(.applicationName)",
+                        "刷新 \(.applicationName) 应用",
+                        "刷新我的 \(.applicationName) 应用",
+                        "使用以下命令刷新应用程序 \(.applicationName)",
                     ],
-                    shortTitle: "Refresh All Apps",
+                    shortTitle: "刷新所有应用",
                     systemImageName: "arrow.triangle.2.circlepath")
     }
     
