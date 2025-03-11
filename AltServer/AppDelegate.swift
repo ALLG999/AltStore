@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.sideloadAppMenuItem.keyEquivalentModifierMask = .option
         self.sideloadAppMenuItem.isAlternate = true
         
-        let placeholder = NSLocalizedString("No Connected Devices", comment: "")
+        let placeholder = NSLocalizedString("没有连接的设备", 描述: "")
         
         self.connectedDevicesMenuController = MenuController<ALTDevice>(menu: self.connectedDevicesMenu, items: [])
         self.connectedDevicesMenuController.placeholder = placeholder
@@ -100,8 +100,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             if !UserDefaults.standard.didPresentInitialNotification
             {
                 let content = UNMutableNotificationContent()
-                content.title = NSLocalizedString("AltServer Running", comment: "")
-                content.body = NSLocalizedString("AltServer runs in the background as a menu bar app listening for AltStore.", comment: "")
+                content.title = NSLocalizedString("AltServer 正在运行", 描述: "")
+                content.body = NSLocalizedString("AltServer 作为菜单栏应用程序在后台运行，监听 AltStore", 描述: "")
                 
                 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
                 UNUserNotificationCenter.current().add(request)
@@ -166,11 +166,11 @@ private extension AppDelegate
                 await MainActor.run { [errorMessage] in
                     let alert = NSAlert()
                     alert.alertStyle = .critical
-                    alert.messageText = NSLocalizedString("Missing AltJIT Dependencies", comment: "")
+                    alert.messageText = NSLocalizedString("缺少 AltJIT 依赖项", comment: "")
                     alert.informativeText = errorMessage
                     
-                    alert.addButton(withTitle: NSLocalizedString("View Instructions", comment: ""))
-                    alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+                    alert.addButton(withTitle: NSLocalizedString("查看说明", comment: ""))
+                    alert.addButton(withTitle: NSLocalizedString("取消", comment: ""))
                     
                     NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
                     
@@ -185,7 +185,7 @@ private extension AppDelegate
             catch let error as NSError
             {
                 await MainActor.run {
-                    let localizedTitle = String(format: NSLocalizedString("JIT could not be enabled for %@.", comment: ""), app.name)
+                    let localizedTitle = String(format: NSLocalizedString("无法启用 JIT %@.", comment: ""), app.name)
                     self.showErrorAlert(error: error.withLocalizedTitle(localizedTitle))
                 }
             }
@@ -195,8 +195,8 @@ private extension AppDelegate
     func installApplication(at fileURL: URL?, to device: ALTDevice)
     {
         let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Please enter your Apple ID and password.", comment: "")
-        alert.informativeText = NSLocalizedString("Your Apple ID and password are not saved and are only sent to Apple for authentication.", comment: "")
+        alert.messageText = NSLocalizedString("请输入您的Apple ID和密码。", comment: "")
+        alert.informativeText = NSLocalizedString("您的 Apple ID 和密码不会被保存，仅会发送给 Apple 进行身份验证。", comment: "")
         
         let textFieldSize = NSSize(width: 300, height: 22)
         
@@ -210,7 +210,7 @@ private extension AppDelegate
         let passwordTextField = NSSecureTextField(frame: NSRect(x: 0, y: 0, width: textFieldSize.width, height: textFieldSize.height))
         passwordTextField.delegate = self
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.placeholderString = NSLocalizedString("Password", comment: "")
+        passwordTextField.placeholderString = NSLocalizedString("密码", comment: "")
         self.authenticationPasswordTextField = passwordTextField
         
         appleIDTextField.nextKeyView = passwordTextField
@@ -223,8 +223,8 @@ private extension AppDelegate
         stackView.addArrangedSubview(passwordTextField)
         alert.accessoryView = stackView
         
-        alert.addButton(withTitle: NSLocalizedString("Install", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("安装l", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("取消", comment: ""))
         
         self.authenticationAlert = alert
         self.validate()
@@ -242,8 +242,8 @@ private extension AppDelegate
             {
             case .success(let application):
                 let content = UNMutableNotificationContent()
-                content.title = NSLocalizedString("Installation Succeeded", comment: "")
-                content.body = String(format: NSLocalizedString("%@ was successfully installed on %@.", comment: ""), application.name, device.name)
+                content.title = NSLocalizedString("安装成功", comment: "")
+                content.body = String(format: NSLocalizedString("%@ 已成功安装 %@.", comment: ""), application.name, device.name)
                 
                 let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
                 UNUserNotificationCenter.current().add(request)
@@ -272,7 +272,7 @@ private extension AppDelegate
             messageComponents.append(recoverySuggestion)
         }
         
-        let title = nsError.localizedTitle ?? NSLocalizedString("Operation Failed", comment: "")
+        let title = nsError.localizedTitle ?? NSLocalizedString("操作失败", comment: "")
         let message = messageComponents.joined(separator: "\n\n")
         
         let alert = NSAlert()
@@ -280,7 +280,7 @@ private extension AppDelegate
         alert.messageText = title
         alert.informativeText = message
         alert.addButton(withTitle: NSLocalizedString("OK", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("View More Details", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("查看更多详细信息", comment: ""))
         
         if let viewMoreButton = alert.buttons.last
         {
@@ -331,14 +331,14 @@ private extension AppDelegate
                 case .failure(PluginError.cancelled): break
                 case .failure(let error):
                     let alert = NSAlert()
-                    alert.messageText = NSLocalizedString("Failed to Uninstall Mail Plug-in", comment: "")
+                    alert.messageText = NSLocalizedString("无法卸载邮件插件", comment: "")
                     alert.informativeText = error.localizedDescription
                     alert.runModal()
                     
                 case .success:
                     let alert = NSAlert()
-                    alert.messageText = NSLocalizedString("Mail Plug-in Uninstalled", comment: "")
-                    alert.informativeText = NSLocalizedString("Please restart Mail for changes to take effect.", comment: "")
+                    alert.messageText = NSLocalizedString("邮件插件已卸载", comment: "")
+                    alert.informativeText = NSLocalizedString("请重新启动邮件以使更改生效。", comment: "")
                     alert.runModal()
                 }
             }
@@ -393,12 +393,12 @@ extension AppDelegate: NSMenuDelegate
         
         // Need to re-set this every time menu appears so we can refresh device app list.
         self.enableJITMenuController.submenuHandler = { [weak self] device in
-            let submenu = NSMenu(title: NSLocalizedString("Sideloaded Apps", comment: ""))
+            let submenu = NSMenu(title: NSLocalizedString("侧载应用程序", comment: ""))
             
             guard let `self` = self else { return submenu }
 
             let submenuController = MenuController<InstalledApp>(menu: submenu, items: [])
-            submenuController.placeholder = NSLocalizedString("Loading...", comment: "")
+            submenuController.placeholder = NSLocalizedString("加载中...", comment: "")
             submenuController.action = { [weak self] (appInfo) in
                 self?.enableJIT(for: appInfo, on: device)
             }
@@ -409,12 +409,12 @@ extension AppDelegate: NSMenuDelegate
             ALTDeviceManager.shared.fetchInstalledApps(on: device) { (installedApps, error) in
                 DispatchQueue.main.async {
                     guard let installedApps = installedApps else {
-                        print("Failed to fetch installed apps from \(device).", error!)
+                        print("无法从以下位置获取已安装的应用程序 \(device).", error!)
                         submenuController.placeholder = error?.localizedDescription
                         return
                     }
                     
-                    print("Fetched \(installedApps.count) apps for \(device).")
+                    print("已获取 \(installedApps.count) 应用来自 \(device).")
                     
                     let sortedApps = installedApps.sorted { (app1, app2) in
                         if app1.name == app2.name
@@ -431,7 +431,7 @@ extension AppDelegate: NSMenuDelegate
                     
                     if submenuController.items.isEmpty
                     {
-                        submenuController.placeholder = NSLocalizedString("No Sideloaded Apps", comment: "")
+                        submenuController.placeholder = NSLocalizedString("没有侧载应用程序s", comment: "")
                     }
                 }
             }
