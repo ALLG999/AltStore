@@ -131,7 +131,7 @@ private extension IntentHandler
                 }
                 catch let error as NSError
                 {
-                    print("Failed to refresh apps in background.", error)
+                    print("无法刷新后台应用程序。", error)
                     self.finish(intent, response: RefreshAllIntentResponse.failure(localizedDescription: error.localizedFailureReason ?? error.localizedDescription))
                 }
                 
