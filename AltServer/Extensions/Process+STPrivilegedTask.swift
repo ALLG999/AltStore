@@ -27,7 +27,7 @@ extension Process
             launchPath = program
         }
         
-        Logger.main.info("Launching admin process: \(launchPath, privacy: .public)")
+        Logger.main.info("启动管理进程： \(launchPath, privacy: .public)")
         
         let task = STPrivilegedTask()
         task.launchPath = launchPath
@@ -50,7 +50,7 @@ extension Process
         
         task.waitUntilExit()
         
-        Logger.main.info("Admin process \(launchPath, privacy: .public) terminated with exit code \(task.terminationStatus, privacy: .public).")
+        Logger.main.info("管理流程 \(launchPath, privacy: .public) 以退出代码终止 \(task.terminationStatus, privacy: .public).")
         
         guard task.terminationStatus == 0 else {
             let executableURL = URL(fileURLWithPath: launchPath)
