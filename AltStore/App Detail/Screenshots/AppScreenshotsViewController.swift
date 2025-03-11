@@ -27,7 +27,7 @@ class AppScreenshotsViewController: UICollectionViewController
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("初始化(coder:) 尚未实施")
     }
     
     override func viewDidLoad()
@@ -147,7 +147,7 @@ private extension AppScreenshotsViewController
             
             if let error = error
             {
-                print("Error loading image:", error)
+                print("载入图片错误：", error)
             }
         }
         
