@@ -123,11 +123,11 @@ class SettingsViewController: UITableViewController
             let localizedVersion = installedApp.version
             #endif
             
-            self.versionLabel.text = NSLocalizedString(String(format: "Version %@", localizedVersion), comment: "AltStore Version")
+            self.versionLabel.text = NSLocalizedString(String(format: "版本 %@", localizedVersion), comment: "AltStore Version")
         }
         else if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         {
-            self.versionLabel.text = NSLocalizedString(String(format: "Version %@", version), comment: "AltStore Version")
+            self.versionLabel.text = NSLocalizedString(String(format: "版本 %@", version), comment: "AltStore Version")
         }
         else
         {
@@ -209,11 +209,11 @@ private extension SettingsViewController
         case .signIn:
             if isHeader
             {
-                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("ACCOUNT", comment: "")
+                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("帐户", comment: "")
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Sign in with your Apple ID to download apps from AltStore.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("使用您的Apple ID登录以从AltStore下载应用程序。", comment: "")
             }
             
         case .patreon:
@@ -223,34 +223,34 @@ private extension SettingsViewController
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Receive access to beta versions of AltStore, Delta, and more by becoming a patron.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("通过成为用户，可以访问AltStore、Delta等的测试版。", comment: "")
             }
             
         case .account:
-            settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("ACCOUNT", comment: "")
+            settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("帐户", comment: "")
             
-            settingsHeaderFooterView.button.setTitle(NSLocalizedString("SIGN OUT", comment: ""), for: .normal)
+            settingsHeaderFooterView.button.setTitle(NSLocalizedString("退出", comment: ""), for: .normal)
             settingsHeaderFooterView.button.addTarget(self, action: #selector(SettingsViewController.signOut(_:)), for: .primaryActionTriggered)
             settingsHeaderFooterView.button.isHidden = false
             
         case .appRefresh:
             if isHeader
             {
-                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("REFRESHING APPS", comment: "")
+                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("刷新应用程序", comment: "")
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Enable Background Refresh to automatically refresh apps in the background when connected to the same Wi-Fi as AltServer.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("启用后台刷新，以便在连接到与AltServer相同的Wi-Fi时在后台自动刷新应用程序。", comment: "")
             }
             
         case .display:
             if isHeader
             {
-                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("DISPLAY", comment: "")
+                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("显示", comment: "")
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Personalize your AltStore experience by choosing an alternate app icon.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("通过选择其他应用程序图标来个性化您的AltStore体验。", comment: "")
             }
             
             
@@ -260,15 +260,15 @@ private extension SettingsViewController
         case .techyThings:
             if isHeader
             {
-                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("TECHY THINGS", comment: "")
+                settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("科技产品", comment: "")
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("Free up disk space by removing non-essential data, such as temporary files and backups for uninstalled apps.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("通过删除非必要数据（如临时文件和已卸载应用程序的备份）来释放磁盘空间。", comment: "")
             }
             
         case .credits:
-            settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("CREDITS", comment: "")
+            settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("信用", comment: "")
             
         case .macDirtyCow:
             if isHeader
@@ -277,11 +277,11 @@ private extension SettingsViewController
             }
             else
             {
-                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("If you've removed the 3-sideloaded app limit via the MacDirtyCow exploit, disable this setting to sideload more than 3 apps at a time.", comment: "")
+                settingsHeaderFooterView.secondaryLabel.text = NSLocalizedString("如果您已通过MacDirtyChow漏洞删除了3个侧面加载的应用程序限制，请禁用此设置以一次侧面加载3个以上的应用程序。", comment: "")
             }
             
         case .debug:
-            settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("DEBUG", comment: "")
+            settingsHeaderFooterView.primaryLabel.text = NSLocalizedString("调试", comment: "")
         }
     }
     
@@ -351,8 +351,8 @@ private extension SettingsViewController
             }
         }
         
-        let alertController = UIAlertController(title: NSLocalizedString("Are you sure you want to sign out?", comment: ""), message: NSLocalizedString("You will no longer be able to install or refresh apps once you sign out.", comment: ""), preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Sign Out", comment: ""), style: .destructive) { _ in signOut() })
+        let alertController = UIAlertController(title: NSLocalizedString("您确定要注销吗？", comment: ""), message: NSLocalizedString("退出后，您将无法再安装或刷新应用程序。", comment: ""), preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("退出", comment: ""), style: .destructive) { _ in signOut() })
         alertController.addAction(.cancel)
         self.present(alertController, animated: true, completion: nil)
     }
@@ -389,13 +389,13 @@ private extension SettingsViewController
     
     func clearCache()
     {
-        let alertController = UIAlertController(title: NSLocalizedString("Are you sure you want to clear AltStore's cache?", comment: ""),
-                                                message: NSLocalizedString("This will remove all temporary files as well as backups for uninstalled apps.", comment: ""),
+        let alertController = UIAlertController(title: NSLocalizedString("您确定要清除AltStore的缓存吗？", comment: ""),
+                                                message: NSLocalizedString("这将删除所有临时文件以及已卸载应用程序的备份。", comment: ""),
                                                 preferredStyle: .actionSheet)
         alertController.addAction(UIAlertAction(title: UIAlertAction.cancel.title, style: UIAlertAction.cancel.style) { [weak self] _ in
             self?.tableView.indexPathForSelectedRow.map { self?.tableView.deselectRow(at: $0, animated: true) }
         })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Clear Cache", comment: ""), style: .destructive) { [weak self] _ in
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("清除缓存", comment: ""), style: .destructive) { [weak self] _ in
             AppManager.shared.clearAppCache { result in
                 DispatchQueue.main.async {
                     self?.tableView.indexPathForSelectedRow.map { self?.tableView.deselectRow(at: $0, animated: true) }
@@ -404,7 +404,7 @@ private extension SettingsViewController
                     {
                     case .success: break
                     case .failure(let error):
-                        let alertController = UIAlertController(title: NSLocalizedString("Unable to Clear Cache", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
+                        let alertController = UIAlertController(title: NSLocalizedString("无法清除缓存", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
                         alertController.addAction(.ok)
                         self?.present(alertController, animated: true)
                     }
@@ -499,6 +499,11 @@ private extension SettingsViewController
     @IBAction func followAltStoreGitHub()
     {
         let safariURL = URL(string: "https://github.com/altstoreio")!
+        UIApplication.shared.open(safariURL, options: [:])
+    } 
+    @IBAction func followAltStoreGitHub()
+    {
+        let safariURL = URL(string: "https://github.com/allg999")!
         UIApplication.shared.open(safariURL, options: [:])
     }
 }
@@ -683,7 +688,7 @@ extension SettingsViewController
                 }
                 else
                 {
-                    let toastView = ToastView(text: NSLocalizedString("Cannot Send Mail", comment: ""), detailText: nil)
+                    let toastView = ToastView(text: NSLocalizedString("无法发送邮件", comment: ""), detailText: nil)
                     toastView.show(in: self)
                 }
                 
