@@ -81,7 +81,7 @@ private extension AppIDsViewController
             cell.bannerView.iconImageView.isHidden = true
             cell.bannerView.button.isIndicatingActivity = false
             
-            cell.bannerView.buttonLabel.text = NSLocalizedString("Expires in", comment: "")
+            cell.bannerView.buttonLabel.text = NSLocalizedString("有效期：, comment: "")
             
             let attributedAccessibilityLabel = NSMutableAttributedString(string: appID.name + ". ")
             
@@ -95,10 +95,10 @@ private extension AppIDsViewController
                 let currentDate = Date()
                 
                 let numberOfDays = expirationDate.numberOfCalendarDays(since: currentDate)
-                let numberOfDaysText = (numberOfDays == 1) ? NSLocalizedString("1 day", comment: "") : String(format: NSLocalizedString("%@ days", comment: ""), NSNumber(value: numberOfDays))
+                let numberOfDaysText = (numberOfDays == 1) ? NSLocalizedString("1 天", comment: "") : String(format: NSLocalizedString("%@ 天", comment: ""), NSNumber(value: numberOfDays))
                 cell.bannerView.button.setTitle(numberOfDaysText.uppercased(), for: .normal)
                 
-                attributedAccessibilityLabel.mutableString.append(String(format: NSLocalizedString("Expires in %@.", comment: ""), numberOfDaysText) + " ")
+                attributedAccessibilityLabel.mutableString.append(String(format: NSLocalizedString("有效期： %@.", comment: ""), numberOfDaysText) + " ")
             }
             else
             {
@@ -203,9 +203,9 @@ extension AppIDsViewController: UICollectionViewDelegateFlowLayout
             if let activeTeam = DatabaseManager.shared.activeTeam(), activeTeam.type == .free
             {
                 let text = NSLocalizedString("""
-                Each app and app extension installed with AltStore must register an App ID with Apple. Apple limits non-developer Apple IDs to 10 App IDs at a time.
+                随AltStore安装的每个应用程序和应用程序扩展都必须向Apple注册一个应用程序ID。Apple将非开发者的Apple ID一次限制为10个App ID。
 
-                **App IDs can't be deleted**, but they do expire after one week. AltStore will automatically renew App IDs for all active apps once they've expired.
+                **应用程序ID不能删除**，但它们会在一周后过期。AltStore将在所有活动应用程序的应用程序ID过期后自动续订。
                 """, comment: "")
                 
                 let attributedText = NSAttributedString(markdownRepresentation: text, attributes: [.font: headerView.textLabel.font as Any])
@@ -214,9 +214,9 @@ extension AppIDsViewController: UICollectionViewDelegateFlowLayout
             else
             {
                 headerView.textLabel.text = NSLocalizedString("""
-                Each app and app extension installed with AltStore must register an App ID with Apple.
+                随AltStore安装的每个应用程序和应用程序扩展都必须向Apple注册一个应用程序ID。
                 
-                App IDs for paid developer accounts never expire, and there is no limit to how many you can create.
+                付费开发人员帐户的应用程序ID永远不会过期，您可以创建的数量也没有限制。
                 """, comment: "")
             }
             
@@ -228,11 +228,11 @@ extension AppIDsViewController: UICollectionViewDelegateFlowLayout
             let count = self.dataSource.itemCount
             if count == 1
             {
-                footerView.textLabel.text = NSLocalizedString("1 App ID", comment: "")
+                footerView.textLabel.text = NSLocalizedString("应用程序ID", comment: "")
             }
             else
             {
-                footerView.textLabel.text = String(format: NSLocalizedString("%@ App IDs", comment: ""), NSNumber(value: count))
+                footerView.textLabel.text = String(format: NSLocalizedString("%@ 应用程序ID", comment: ""), NSNumber(value: count))
             }
             
             return footerView
