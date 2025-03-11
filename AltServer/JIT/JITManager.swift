@@ -182,7 +182,7 @@ private extension JITManager
             else if output.contains(deviceNotFoundRegex)
             {
                 throw ALTServerError(.deviceNotFound, userInfo: [
-                    NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString("Your device must be plugged into your computer to enable JIT on iOS 17 or later.", comment: "")
+                    NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString("您的设备必须插入计算机才能在iOS 17或更高版本上启用JIT。", comment: "")
                 ])
             }
             
