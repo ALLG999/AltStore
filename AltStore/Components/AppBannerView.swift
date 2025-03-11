@@ -163,7 +163,7 @@ extension AppBannerView
         }
         else
         {
-            self.subtitleLabel.text = NSLocalizedString("Sideloaded", comment: "")
+            self.subtitleLabel.text = NSLocalizedString("侧载", comment: "")
             self.accessibilityLabel = values.name
         }
         
@@ -174,15 +174,15 @@ extension AppBannerView
             
             if storeApp.isPledged
             {
-                self.buttonLabel.text = NSLocalizedString("Pledged", comment: "")
+                self.buttonLabel.text = NSLocalizedString("质保中", comment: "")
             }
             else if storeApp.installedApp != nil
             {
-                self.buttonLabel.text = NSLocalizedString("Pledge Expired", comment: "")
+                self.buttonLabel.text = NSLocalizedString("质保已过期", comment: "")
             }
             else
             {
-                self.buttonLabel.text = NSLocalizedString("Join Patreon", comment: "")
+                self.buttonLabel.text = NSLocalizedString("加入 Patreon", comment: "")
             }
         }
         else
@@ -209,7 +209,7 @@ extension AppBannerView
                     Nuke.loadImage(with: iconURL, into: self.sourceIconImageView) { result in
                         switch result
                         {
-                        case .failure(let error): Logger.main.error("Failed to fetch source icon from \(iconURL, privacy: .public). \(error.localizedDescription, privacy: .public)")
+                        case .failure(let error): Logger.main.error("无法从以下位置获取源图标 \(iconURL, privacy: .public). \(error.localizedDescription, privacy: .public)")
                         case .success: self.sourceIconImageView.backgroundColor = .white // In case icon has transparent background.
                         }
                     }
@@ -258,17 +258,17 @@ extension AppBannerView
             switch buttonAction
             {
             case .open:
-                let buttonTitle = NSLocalizedString("Open", comment: "")
+                let buttonTitle = NSLocalizedString("打开", comment: "")
                 self.button.setTitle(buttonTitle.uppercased(), for: .normal)
-                self.button.accessibilityLabel = String(format: NSLocalizedString("Open %@", comment: ""), values.name)
+                self.button.accessibilityLabel = String(format: NSLocalizedString("打卡 %@", comment: ""), values.name)
                 self.button.accessibilityValue = buttonTitle
                 
                 self.button.countdownDate = nil
                 
             case .update:
-                let buttonTitle = NSLocalizedString("Update", comment: "")
+                let buttonTitle = NSLocalizedString("更新", comment: "")
                 self.button.setTitle(buttonTitle.uppercased(), for: .normal)
-                self.button.accessibilityLabel = String(format: NSLocalizedString("Update %@", comment: ""), values.name)
+                self.button.accessibilityLabel = String(format: NSLocalizedString("更新 %@", comment: ""), values.name)
                 self.button.accessibilityValue = buttonTitle
                 
                 self.button.countdownDate = nil
@@ -287,9 +287,9 @@ extension AppBannerView
                     
                     if storeApp.isPledged
                     {
-                        let buttonTitle = NSLocalizedString("Install", comment: "")
+                        let buttonTitle = NSLocalizedString("安装", comment: "")
                         self.button.setTitle(buttonTitle.uppercased(), for: .normal)
-                        self.button.accessibilityLabel = String(format: NSLocalizedString("Install %@", comment: ""), app.name)
+                        self.button.accessibilityLabel = String(format: NSLocalizedString("安装 %@", comment: ""), app.name)
                         self.button.accessibilityValue = buttonTitle
                     }
                     else if let amount = storeApp.pledgeAmount, let currencyCode = storeApp.pledgeCurrency, !storeApp.prefersCustomPledge, #available(iOS 15, *)
@@ -298,8 +298,8 @@ extension AppBannerView
                         
                         let buttonTitle = String(format: NSLocalizedString("%@/mo", comment: ""), price)
                         self.button.setTitle(buttonTitle, for: .normal)
-                        self.button.accessibilityLabel = String(format: NSLocalizedString("Pledge %@ a month", comment: ""), price)
-                        self.button.accessibilityValue = String(format: NSLocalizedString("%@ a month", comment: ""), price)
+                        self.button.accessibilityLabel = String(format: NSLocalizedString("质保 %@ 月", comment: ""), price)
+                        self.button.accessibilityValue = String(format: NSLocalizedString("%@ 月", comment: ""), price)
                     }
                     else
                     {
