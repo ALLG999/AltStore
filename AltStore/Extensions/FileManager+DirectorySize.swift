@@ -27,7 +27,7 @@ extension FileManager
             }
             catch
             {
-                print("Failed to read file size for item: \(fileURL).", error)
+                print("无法读取项目的文件大小： \(fileURL).", error)
             }
         }
         
