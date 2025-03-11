@@ -55,11 +55,11 @@ struct PluginError: ALTLocalizedError
     var errorFailureReason: String {
         switch self.code
         {
-        case .cancelled: return NSLocalizedString("Mail plug-in installation was cancelled.", comment: "")
-        case .unknown: return NSLocalizedString("Failed to install Mail plug-in.", comment: "")
-        case .notFound: return NSLocalizedString("The Mail plug-in does not exist at the requested URL.", comment: "")
+        case .cancelled: return NSLocalizedString("邮件插件安装已取消。", comment: "")
+        case .unknown: return NSLocalizedString("无法安装邮件插件。", comment: "")
+        case .notFound: return NSLocalizedString("请求的 URL 上不存在邮件插件。", comment: "")
         case .mismatchedHash:
-            let baseMessage = NSLocalizedString("The hash of the downloaded Mail plug-in does not match the expected hash.", comment: "")
+            let baseMessage = NSLocalizedString("下载的邮件插件的哈希值与预期的哈希值不匹配。", comment: "")
             guard let hash = self.hash, let expectedHash = self.expectedHash else { return baseMessage }
             
             let additionalInfo = String(format: NSLocalizedString("Hash:\n%@\n\nExpected Hash:\n%@", comment: ""), hash, expectedHash)
@@ -75,10 +75,10 @@ struct PluginError: ALTLocalizedError
             fallthrough
             
         case .taskErrorCode:
-            let baseMessage = NSLocalizedString("There was an error installing the Mail plug-in.", comment: "")
+            let baseMessage = NSLocalizedString("安装邮件插件时出错。", comment: "")
             guard let errorCode = self.taskErrorCode else { return baseMessage }
             
-            let additionalInfo = String(format: NSLocalizedString("(Error Code: %@)", comment: ""), NSNumber(value: errorCode))
+            let additionalInfo = String(format: NSLocalizedString("(错误代码: %@)", comment: ""), NSNumber(value: errorCode))
             return baseMessage + " " + additionalInfo
         }
     }
@@ -152,11 +152,11 @@ extension PluginManager
     func uninstallMailPlugin(completionHandler: @escaping (Result<Void, Error>) -> Void)
     {
         let alert = NSAlert()
-        alert.messageText = NSLocalizedString("Uninstall Mail Plug-in", comment: "")
-        alert.informativeText = NSLocalizedString("Are you sure you want to uninstall the AltServer Mail plug-in?", comment: "")
+        alert.messageText = NSLocalizedString("卸载邮件插件", comment: "")
+        alert.informativeText = NSLocalizedString("您确定要卸载 AltServer Mail 插件吗？", comment: "")
         
-        alert.addButton(withTitle: NSLocalizedString("Uninstall Plug-in", comment: ""))
-        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("卸载插件", comment: ""))
+        alert.addButton(withTitle: NSLocalizedString("取消", comment: ""))
         
         NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
         
@@ -230,7 +230,7 @@ private extension PluginManager
                         let sha256Hash = SHA256.hash(data: data)
                         let hashString = sha256Hash.compactMap { String(format: "%02x", $0) }.joined()
                         
-                        print("Comparing Mail plug-in hash (\(hashString)) against expected hash (\(pluginVersion.sha256Hash))...")
+                        print("比较邮件插件哈希 (\(hashString)) 针对预期哈希 (\(pluginVersion.sha256Hash))...")
                         guard hashString == pluginVersion.sha256Hash else { throw PluginError.mismatchedHash(hash: hashString, expectedHash: pluginVersion.sha256Hash) }
                         
                         completion(.success(fileURL))
@@ -309,7 +309,7 @@ private extension PluginManager
         
         task.waitUntilExit()
         
-        print("Exit code:", task.terminationStatus)
+        print("退出代码：", task.terminationStatus)
         
         guard task.terminationStatus == 0 else {
             let outputData = task.outputFileHandle.readDataToEndOfFile()
