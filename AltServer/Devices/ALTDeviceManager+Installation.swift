@@ -61,10 +61,10 @@ struct OperationError: ALTLocalizedError
     var errorFailureReason: String {
         switch self.code
         {
-        case .cancelled: return NSLocalizedString("The operation was cancelled.", comment: "")
-        case .noTeam: return NSLocalizedString("You are not a member of any developer teams.", comment: "")
-        case .missingPrivateKey: return NSLocalizedString("The developer certificate's private key could not be found.", comment: "")
-        case .missingCertificate: return NSLocalizedString("The developer certificate could not be found.", comment: "")
+        case .cancelled: return NSLocalizedString("操作被取消。", comment: "")
+        case .noTeam: return NSLocalizedString("您不是任何开发团队的成员。", comment: "")
+        case .missingPrivateKey: return NSLocalizedString("找不到开发者证书的私钥。", comment: "")
+        case .missingCertificate: return NSLocalizedString("找不到开发者证书。", comment: "")
         }
     }
 }
@@ -114,7 +114,7 @@ extension ALTDeviceManager
                 {
                 case .success(let app): completion(.success(app))
                 case .failure(var error as NSError):
-                    error = error.withLocalizedTitle(String(format: NSLocalizedString("%@ could not be installed onto %@.", comment: ""), appName, altDevice.name))
+                    error = error.withLocalizedTitle(String(format: NSLocalizedString("%@ 无法安装到 %@.", comment: ""), appName, altDevice.name))
                     
                     if let failure, error.localizedFailure == nil
                     {
@@ -164,7 +164,7 @@ extension ALTDeviceManager
                                                     switch result
                                                     {
                                                     case .failure(let error):
-                                                        print("Failed to install DeveloperDiskImage.dmg to \(device).", error)
+                                                        print("无法将 DeveloperDiskImage.dmg 安装到 \(device).", error)
                                                         fallthrough // Continue installing app even if we couldn't install Developer disk image.
                                                     
                                                     case .success:
@@ -204,7 +204,7 @@ extension ALTDeviceManager
                                                                             }
                                                                             catch
                                                                             {
-                                                                                finish(.failure(error), failure: NSLocalizedString("AltServer could not fetch new provisioning profiles.", comment: ""))
+                                                                                finish(.failure(error), failure: NSLocalizedString("AltServer 无法获取新的配置文件。", comment: ""))
                                                                             }
                                                                         }
                                                                     }
@@ -216,7 +216,7 @@ extension ALTDeviceManager
                                                             }
                                                             catch
                                                             {
-                                                                let failure = String(format: NSLocalizedString("%@ could not be downloaded.", comment: ""), appName)
+                                                                let failure = String(format: NSLocalizedString("%@ 无法下载。", comment: ""), appName)
                                                                 finish(.failure(error), failure: failure)
                                                             }
                                                         }
@@ -225,13 +225,13 @@ extension ALTDeviceManager
                                             }
                                             catch
                                             {
-                                                finish(.failure(error), failure: NSLocalizedString("A valid signing certificate could not be created.", comment: ""))
+                                                finish(.failure(error), failure: NSLocalizedString("无法创建有效的签名证书。", comment: ""))
                                             }
                                         }
                                     }
                                     catch
                                     {
-                                        finish(.failure(error), failure: NSLocalizedString("Your device could not be registered with your development team.", comment: ""))
+                                        finish(.failure(error), failure: NSLocalizedString("您的设备无法在开发团队中注册。", comment: ""))
                                     }
                                 }
                             }
@@ -243,7 +243,7 @@ extension ALTDeviceManager
                     }
                     catch
                     {
-                        finish(.failure(error), failure: NSLocalizedString("AltServer could not sign in with your Apple ID.", comment: ""))
+                        finish(.failure(error), failure: NSLocalizedString("AltServer 无法使用您的 Apple ID 登录。", comment: ""))
                     }
                 }
             }
@@ -327,15 +327,15 @@ private extension ALTDeviceManager
                 let source = try Foundation.JSONDecoder().decode(Source.self, from: data)
                 
                 guard let altstore = source.apps.first(where: { $0.bundleIdentifier == altstoreBundleID }) else {
-                    let debugDescription = String(format: NSLocalizedString("App with bundle ID '%@' does not exist in source JSON.", comment: ""), altstoreBundleID)
+                    let debugDescription = String(format: NSLocalizedString("带有软件包 ID 的应用程序 '%@' 源JSON中不存在。", comment: ""), altstoreBundleID)
                     throw CocoaError(.coderValueNotFound, userInfo: [NSDebugDescriptionErrorKey: debugDescription])
                 }
                 guard let versions = altstore.versions else {
-                    let debugDescription = String(format: NSLocalizedString("There is no 'versions' key for %@.", comment: ""), altstore.bundleIdentifier)
+                    let debugDescription = String(format: NSLocalizedString("没有 'versions' 关键 %@.", comment: ""), altstore.bundleIdentifier)
                     throw CocoaError(.coderReadCorrupt, userInfo: [NSDebugDescriptionErrorKey: debugDescription])
                 }
                 guard let latestVersion = versions.first else {
-                    let debugDescription = String(format: NSLocalizedString("The 'versions' array is empty for %@.", comment: ""), altstore.bundleIdentifier)
+                    let debugDescription = String(format: NSLocalizedString("这 'versions' 数组为空 %@.", comment: ""), altstore.bundleIdentifier)
                     throw CocoaError(.coderValueNotFound, userInfo: [NSDebugDescriptionErrorKey: debugDescription])
                 }
                 
@@ -359,17 +359,17 @@ private extension ALTDeviceManager
                 }
                 
                 DispatchQueue.main.async {
-                    var message = String(format: NSLocalizedString("%@ is running %@ %@, but AltStore requires %@ %@ or later.", comment: ""), device.name, osName, device.osVersion.stringValue, osName, minOSVersionString)
+                    var message = String(format: NSLocalizedString("%@ 正在运行 %@ %@, 但 AltStore 需要 %@ %@ 稍后。", comment: ""), device.name, osName, device.osVersion.stringValue, osName, minOSVersionString)
                     message += "\n\n"
-                    message += NSLocalizedString("Would you like to download the last version compatible with your device instead?", comment: "")
+                    message += NSLocalizedString("您是否想下载与您的设备兼容的最新版本？", comment: "")
                     
                     let alert = NSAlert()
-                    alert.messageText = String(format: NSLocalizedString("Unsupported %@ Version", comment: ""), osName)
+                    alert.messageText = String(format: NSLocalizedString("不支持 %@ 版本", comment: ""), osName)
                     alert.informativeText = message
                     
-                    let buttonTitle = String(format: NSLocalizedString("Download %@ %@", comment: ""), altstore.name, latestSupportedVersion.version)
+                    let buttonTitle = String(format: NSLocalizedString("下载 %@ %@", comment: ""), altstore.name, latestSupportedVersion.version)
                     alert.addButton(withTitle: buttonTitle)
-                    alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+                    alert.addButton(withTitle: NSLocalizedString("取消", comment: ""))
                     
                     let index = alert.runModal()
                     if index == .alertFirstButtonReturn
@@ -390,7 +390,7 @@ private extension ALTDeviceManager
             }
             catch let error as NSError
             {
-                completion(.failure(error.withLocalizedFailure("The download URL could not be determined.")))
+                completion(.failure(error.withLocalizedFailure("无法确定下载 URL。")))
             }
         }
         
@@ -403,8 +403,8 @@ private extension ALTDeviceManager
         {
             DispatchQueue.main.async {
                 let alert = NSAlert()
-                alert.messageText = NSLocalizedString("Two-Factor Authentication Enabled", comment: "")
-                alert.informativeText = NSLocalizedString("Please enter the 6-digit verification code that was sent to your Apple devices.", comment: "")
+                alert.messageText = NSLocalizedString("启用双因素身份验证", comment: "")
+                alert.informativeText = NSLocalizedString("请输入发送到您的 Apple 设备的 6 位验证码。", comment: "")
                 
                 let textField = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 22))
                 textField.delegate = self
@@ -413,8 +413,8 @@ private extension ALTDeviceManager
                 alert.accessoryView = textField
                 alert.window.initialFirstResponder = textField
                 
-                alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
-                alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+                alert.addButton(withTitle: NSLocalizedString("继续", comment: ""))
+                alert.addButton(withTitle: NSLocalizedString("取消", comment: ""))
                 
                 self.securityCodeAlert = alert
                 self.securityCodeTextField = textField
@@ -505,11 +505,11 @@ private extension ALTDeviceManager
                                         
                     DispatchQueue.main.sync {
                         let alert = NSAlert()
-                        alert.messageText = NSLocalizedString("Multiple AltServers Not Supported", comment: "")
-                        alert.informativeText = NSLocalizedString("Please use the same AltServer you previously used with this Apple ID, or else apps installed with other AltServers will stop working.\n\nAre you sure you want to continue?", comment: "")
+                        alert.messageText = NSLocalizedString("不支持多个 AltServer", comment: "")
+                        alert.informativeText = NSLocalizedString("请使用您之前使用此 Apple ID 的相同 AltServer，否则使用其他 AltServer 安装的应用程序将停止工作。\n\n您确定要继续吗？", comment: "")
                         
-                        alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
-                        alert.addButton(withTitle: NSLocalizedString("Cancel", comment: ""))
+                        alert.addButton(withTitle: NSLocalizedString("继续", comment: ""))
+                        alert.addButton(withTitle: NSLocalizedString("取消", comment: ""))
                         
                         NSRunningApplication.current.activate(options: .activateIgnoringOtherApps)
                         
@@ -571,11 +571,11 @@ private extension ALTDeviceManager
                     {
                         DispatchQueue.main.sync {
                             let alert = NSAlert()
-                            alert.messageText = NSLocalizedString("Installing this app will revoke your iOS development certificate.", comment: "")
+                            alert.messageText = NSLocalizedString("安装此应用程序将撤销您的 iOS 开发证书。", comment: "")
                             alert.informativeText = NSLocalizedString("""
-    This will not affect apps you've submitted to the App Store, but may cause apps you've installed to your devices with Xcode to stop working until you reinstall them.
+    这不会影响您提交到App Store的应用程序，但可能会导致您使用Xcode安装到设备上的应用程序停止工作，直到您重新安装它们。
 
-    To prevent this from happening, feel free to try again with another Apple ID.
+为了防止这种情况发生，请随时使用另一个Apple ID重试。
     """, comment: "")
                             
                             alert.addButton(withTitle: NSLocalizedString("Continue", comment: ""))
@@ -1010,14 +1010,14 @@ private extension ALTDeviceManager
                     }
                     catch
                     {
-                        print("Failed to install app", error)
+                        print("无法安装应用程序", error)
                         completionHandler(.failure(error))
                     }
                 }
             }
             catch
             {
-                print("Failed to install AltStore", error)
+                print("无法安装 AltStore", error)
                 completionHandler(.failure(error))
             }
         }
@@ -1026,8 +1026,8 @@ private extension ALTDeviceManager
     func showInstallationAlert(appName: String, deviceName: String)
     {
         let content = UNMutableNotificationContent()
-        content.title = String(format: NSLocalizedString("Installing %@ to %@...", comment: ""), appName, deviceName)
-        content.body = NSLocalizedString("This may take a few seconds.", comment: "")
+        content.title = String(format: NSLocalizedString("安装 %@ 到 %@...", comment: ""), appName, deviceName)
+        content.body = NSLocalizedString("这可能需要几秒钟。", comment: "")
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
