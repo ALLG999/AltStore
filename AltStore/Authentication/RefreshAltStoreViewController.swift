@@ -28,7 +28,7 @@ class RefreshAltStoreViewController: UIViewController
         
         self.placeholderView.detailTextLabel.textAlignment = .left
         self.placeholderView.detailTextLabel.textColor = UIColor.white.withAlphaComponent(0.6)
-        self.placeholderView.detailTextLabel.text = NSLocalizedString("AltStore was unable to use an existing signing certificate, so it had to create a new one. This will cause any apps installed with an existing certificate to expire — including AltStore.\n\nTo prevent AltStore from expiring early, please refresh the app now. AltStore will quit once refreshing is complete.", comment: "")
+        self.placeholderView.detailTextLabel.text = NSLocalizedString("AltStore无法使用现有的签名证书，因此必须创建一个新的证书。这将导致任何使用现有证书安装的应用程序过期，包括AltStore。\n\n为防止AltStore提前过期，请立即刷新应用程序。刷新完成后，AltStore将退出。", comment: "")
     }
 }
 
@@ -58,11 +58,11 @@ private extension RefreshAltStoreViewController
                         sender.progress = nil
                         sender.isIndicatingActivity = false
                         
-                        let alertController = UIAlertController(title: NSLocalizedString("Failed to Refresh AltStore", comment: ""), message: error.localizedFailureReason ?? error.localizedDescription, preferredStyle: .alert)
-                        alertController.addAction(UIAlertAction(title: NSLocalizedString("Try Again", comment: ""), style: .default, handler: { (action) in
+                        let alertController = UIAlertController(title: NSLocalizedString("无法刷新 AltStore", comment: ""), message: error.localizedFailureReason ?? error.localizedDescription, preferredStyle: .alert)
+                        alertController.addAction(UIAlertAction(title: NSLocalizedString("重试", comment: ""), style: .default, handler: { (action) in
                             refresh()
                         }))
-                        alertController.addAction(UIAlertAction(title: NSLocalizedString("Refresh Later", comment: ""), style: .cancel, handler: { (action) in
+                        alertController.addAction(UIAlertAction(title: NSLocalizedString("稍后刷新", comment: ""), style: .cancel, handler: { (action) in
                             self.completionHandler?(.failure(error))
                         }))
                         
