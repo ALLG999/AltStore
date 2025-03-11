@@ -29,7 +29,7 @@ class PreviewAppScreenshotsViewController: UICollectionViewController
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("初始化(coder:) 尚未实施")
     }
     
     override func viewDidLoad()
